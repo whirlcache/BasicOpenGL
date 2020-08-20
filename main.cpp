@@ -44,22 +44,55 @@ int main(int argc, char** argv)
 
 	glewInit();
 
-	std::vector<glm::vec3> sphereVertes;
-	std::vector<glm::vec3> sphereNormals;
-	std::vector<glm::vec2> sphereUVs;
+	// 立方体
+	std::vector<glm::vec3> cubeVertes;
+	std::vector<glm::vec3> cubeNormals;
+	std::vector<glm::vec2> cubeUVs;
+	// 平面
+	std::vector<glm::vec3> planeVertes;
+	std::vector<glm::vec3> planeNormals;
+	std::vector<glm::vec2> planeUVs;
 
-	LoadFromFile("./Sphere.obj", sphereVertes, sphereUVs, sphereNormals);
-	Mesh spereMesh = Mesh(sphereVertes, sphereNormals, sphereUVs);
-	Shader spereShader = Shader("./Shader/basic.vs", "./Shader/basic.fs");
-	Material spereMat = Material(spereShader);
-	spereMat.SetTexture("./pic_card5_42.png");
-	GameObject sphereModel = GameObject(spereMesh, spereMat);
+	LoadFromFile("./Cube.obj", cubeVertes, cubeUVs, cubeNormals);
+	LoadFromFile("./Plane.obj", planeVertes, planeUVs, planeNormals);
 
-	sphereModel.UpdateMaterialVec3("lightPos", lightPos);
-	sphereModel.UpdateMaterialVec3("lightColor", lightColor);
+	Mesh cubeMesh = Mesh(cubeVertes, cubeNormals, cubeUVs);
+	Mesh cube2Mesh = Mesh(cubeVertes, cubeNormals, cubeUVs);
+	Mesh planeMesh = Mesh(planeVertes, planeNormals, planeUVs);
+
+	Shader cubeShader = Shader("./Shader/basic.vs", "./Shader/basic.fs");
+	Shader cube2Shader = Shader("./Shader/basic.vs", "./Shader/basic.fs");
+	Shader planeShader = Shader("./Shader/basic.vs", "./Shader/basic.fs");
+
+	Material cubeMat = Material(cubeShader);
+	Material cube2Mat = Material(cube2Shader);
+	Material planeMat = Material(planeShader);
+
+	GameObject cubeModel = GameObject(cubeMesh, cubeMat);
+	GameObject cube2Model = GameObject(cube2Mesh, cube2Mat);
+	GameObject planeModel = GameObject(planeMesh, planeMat);
+
+	cubeModel.UpdateMaterialVec3("lightPos", lightPos);
+	cubeModel.UpdateMaterialVec3("lightColor", lightColor);
+
+	cube2Model.UpdateMaterialVec3("lightPos", lightPos);
+	cube2Model.UpdateMaterialVec3("lightColor", lightColor);
+
+	planeModel.UpdateMaterialVec3("lightPos", lightPos);
+	planeModel.UpdateMaterialVec3("lightColor", lightColor);
+
+	
+	//cubeModel.SetTexture("./texture.png");
+	cube2Model.SetTexture("./texture.png");
+	planeModel.SetTexture("./marble.png");
+	
 
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	//glDepthFunc(GL_ALWAYS);
+	//glCullFace(GL_FRONT);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		double currentTime = glfwGetTime();
@@ -74,11 +107,27 @@ int main(int argc, char** argv)
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-		sphereModel.UpdateMaterialMat4("model", model);
-		sphereModel.UpdateMaterialMat4("view", view);
-		sphereModel.UpdateMaterialMat4("projection", projection);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.5f));
+		cubeModel.UpdateMaterialMat4("model", model);
+		cubeModel.UpdateMaterialMat4("view", view);
+		cubeModel.UpdateMaterialMat4("projection", projection);
+		cubeModel.Render();
 
-		sphereModel.Render();
+		model = glm::translate(model, glm::vec3(1.5f, 0.0f, -2.5f));
+		cube2Model.UpdateMaterialMat4("model", model);
+		cube2Model.UpdateMaterialMat4("view", view);
+		cube2Model.UpdateMaterialMat4("projection", projection);
+		cube2Model.Render();
+		
+
+		glm::mat4 pModel = glm::mat4(1.0f);
+		pModel = glm::translate(pModel, glm::vec3(0.0f, -1.1f, 0.0f));
+		pModel = glm::scale(pModel, glm::vec3(4.0f, 4.0f, 4.0f));
+
+		planeModel.UpdateMaterialMat4("model", pModel);
+		planeModel.UpdateMaterialMat4("view", view);
+		planeModel.UpdateMaterialMat4("projection", projection);
+		planeModel.Render();
 
 
 		glfwPollEvents();

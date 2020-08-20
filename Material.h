@@ -11,11 +11,11 @@ public:
 
 	void SetMat4(const GLchar*, glm::mat4);
 	void SetVec3(const GLchar*, glm::vec3);
+	void SetInt(const GLchar*, int);
 	void Render();
 
 	void SetTexture(const GLchar* src);
-
 private:
 	Shader shader;
-	GLuint texture;
+	GLuint texture = NULL;
 };

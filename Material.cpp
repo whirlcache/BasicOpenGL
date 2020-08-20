@@ -15,9 +15,6 @@ Material::~Material()
 Material::Material(Shader shader)
 {
 	this->shader = shader;
-
-	glm::mat4 model = glm::mat4(1.0f);
-	glm::mat4 view = glm::mat4(1.0f);
 }
 
 void Material::SetVec3(const GLchar* propStr, glm::vec3 vec3)
@@ -30,6 +27,13 @@ void Material::SetMat4(const GLchar* propStr, glm::mat4 mat4)
 	this->shader.UseProgram();
 	this->shader.SetMat4(propStr, mat4);
 }
+
+void Material::SetInt(const GLchar* propStr, int value)
+{
+	this->shader.UseProgram();
+	this->shader.SetInt(propStr, value);
+}
+
 void Material::SetTexture(const GLchar* src)
 {
 	glGenTextures(1, &this->texture);
@@ -48,11 +52,15 @@ void Material::SetTexture(const GLchar* src)
 	{
 		if (imgChannel == 4)
 		{//RGBA 4 channel
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imgWidth, imgHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imgData);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgWidth, imgHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imgData);
 		}
-		else
+		else if (imgChannel==3)
 		{//RGB 3 channel
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imgWidth, imgHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, imgData);
+		}
+		else
+		{//RED 1 channel
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, imgWidth, imgHeight, 0, GL_RED, GL_UNSIGNED_BYTE, imgData);
 		}
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
@@ -61,16 +69,16 @@ void Material::SetTexture(const GLchar* src)
 		cout << "Image File not found!" << endl;
 	}
 	stbi_image_free(imgData);
-
-	this->shader.UseProgram();
-	this->shader.SetInt("outTexture", 0);
 }
 
 
 void Material::Render()
 {
 	this->shader.UseProgram();
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, this->texture);
+	if (this->texture > 0)
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, this->texture);
+		this->shader.SetInt("outTexture", 0);
+	}
 }

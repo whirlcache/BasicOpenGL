@@ -55,6 +55,8 @@ void Mesh::InitMesh()
 		glBufferData(GL_ARRAY_BUFFER, this->uvs.size() * sizeof(glm::vec2), &this->uvs[0], GL_STATIC_DRAW);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GL_FLOAT), (void*)0);
 	}
+
+	glBindVertexArray(0);
 }
 
 void Mesh::Render()
@@ -64,4 +66,9 @@ void Mesh::Render()
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 	glDrawArrays(GL_TRIANGLES, 0, Size());
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+	glBindVertexArray(0);
 }
