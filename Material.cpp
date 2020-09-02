@@ -75,10 +75,6 @@ void Material::SetTexture(const GLchar* src)
 void Material::Render()
 {
 	this->shader.UseProgram();
-	if (this->texture > 0)
-	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, this->texture);
-		this->shader.SetInt("outTexture", 0);
-	}
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, this->texture);
 }

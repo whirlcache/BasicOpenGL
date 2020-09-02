@@ -8,7 +8,6 @@ GameObject::GameObject(Mesh mesh, Material matrials)
 
 GameObject::~GameObject()
 {
-
 }
 
 void GameObject::UpdateMaterialInt(const GLchar* prop, int value)

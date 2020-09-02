@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 	Mesh cube2Mesh = Mesh(cubeVertes, cubeNormals, cubeUVs);
 	Mesh planeMesh = Mesh(planeVertes, planeNormals, planeUVs);
 
-	Shader cubeShader = Shader("./Shader/basic.vs", "./Shader/basic.fs");
+	Shader cubeShader = Shader("./Shader/singleColor.vs", "./Shader/singleColor.fs");
 	Shader cube2Shader = Shader("./Shader/basic.vs", "./Shader/basic.fs");
 	Shader planeShader = Shader("./Shader/basic.vs", "./Shader/basic.fs");
 

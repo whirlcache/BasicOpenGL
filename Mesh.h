@@ -11,13 +11,12 @@ public:
 
 	GLsizei Size();
 	void Render();
-	GLuint GetVAO();
 private:
 	std::vector<glm::vec3> vertexs;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> uvs;
 
-	GLuint vao;
-
+	GLuint VAO;
+	
 	void InitMesh();
 };
